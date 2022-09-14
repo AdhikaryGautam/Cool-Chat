@@ -1,44 +1,63 @@
 import { useState, useContext } from "react";
 import { useNavigate } from "react-router-dom";
 
-import { FaUserAlt, FaLock, FaIdCard } from "react-icons/fa";
-import { signInWithEmailAndPassword } from "firebase/auth";
+import { FaUserAlt, FaLock } from "react-icons/fa";
 
+import { signInWithEmailAndPassword } from "firebase/auth";
 import { doc, updateDoc } from "firebase/firestore";
 import { auth, db } from "../firebase";
 
-import { AuthContext } from "../context/context";
+import { UserContext } from "../context/context";
+import Alerts from "../components/Alerts";
 
 const Login = ({ children }) => {
   const navigate = useNavigate();
-  const { user, setUser } = useContext(AuthContext);
+  const { user, setUser } = useContext(UserContext);
+  const [errMessage, setErrMessage] = useState("");
+  const [err, setErr] = useState(false);
   const [formData, setFormData] = useState({
-    name: "",
     email: "",
     password: "",
   });
 
   const signIn = async (e) => {
     e.preventDefault();
-    if (formData.password.length >= 6) {
-      try {
-        const userCredential = await signInWithEmailAndPassword(
-          auth,
-          formData.email,
-          formData.password
-        );
-        await updateDoc(doc(db, "users", auth.currentUser.uid), {
-          isOnline: true,
-        });
-        setUser(userCredential.user);
+    try {
+      const userCredential = await signInWithEmailAndPassword(
+        auth,
+        formData.email,
+        formData.password
+      );
+      await updateDoc(doc(db, "users", auth.currentUser.uid), {
+        isOnline: true,
+      });
+      setUser(userCredential.user);
+      setFormData({
+        email: "",
+        password: "",
+      });
+      navigate("/");
+    } catch (error) {
+      setErr(true);
+      const errorMsg = error.message;
+      if (errorMsg.includes("password")) {
+        setErrMessage("Incorrect password");
         setFormData({
-          name: "",
+          ...formData,
+          password: "",
+        });
+      } else if (
+        errorMsg.includes("user-not-found") ||
+        errorMsg.includes("email")
+      ) {
+        setErrMessage("Email not found");
+        setFormData({
+          ...formData,
           email: "",
           password: "",
         });
-        navigate("/");
-      } catch (error) {
-        console.log(error.message);
+      } else {
+        setErrMessage(errorMsg);
       }
     }
   };
@@ -48,43 +67,49 @@ const Login = ({ children }) => {
   };
 
   return (
-    <div className="form-container">
-      <div className="form-title">
-        <h3>Sign In</h3>
-        <p>Sign In to continue to CoolChat</p>
+    <>
+      {err && <Alerts message={errMessage} setErr={setErr} />}
+      <div className="form-container">
+        <div className="form-title">
+          <h3>Sign In</h3>
+          <p>Sign In to continue to CoolChat</p>
+        </div>
+        <form action="#">
+          <div className="form-group">
+            <label htmlFor="email"> Email </label>
+            <input
+              type="email"
+              name="email"
+              className="form-control"
+              id="email"
+              required
+              value={formData.email}
+              onChange={handleChange}
+              placeholder="Enter your email"
+            />
+            <FaUserAlt className="form-icon" />
+          </div>
+          <div className="form-group">
+            <label htmlFor="password"> Password </label>
+            <input
+              type="password"
+              name="password"
+              required
+              className="form-control"
+              id="password"
+              onChange={handleChange}
+              value={formData.password}
+              placeholder="Enter your password"
+            />
+            <FaLock className="form-icon" />
+          </div>
+          <button onClick={signIn}>Sign In</button>
+          <p className="text-center">
+            Don't have an account? <a href="/register">Sign Up</a>
+          </p>
+        </form>
       </div>
-      <form action="#">
-        <div className="form-group">
-          <label htmlFor="email"> Email </label>
-          <input
-            type="email"
-            name="email"
-            className="form-control"
-            id="email"
-            required
-            value={formData.email}
-            onChange={handleChange}
-            placeholder="Enter your email"
-          />
-          <FaUserAlt className="form-icon" />
-        </div>
-        <div className="form-group">
-          <label htmlFor="password"> Password </label>
-          <input
-            type="password"
-            name="password"
-            required
-            className="form-control"
-            id="password"
-            onChange={handleChange}
-            value={formData.password}
-            placeholder="Enter your password"
-          />
-          <FaLock className="form-icon" />
-        </div>
-        <button onClick={signIn}>Sign In</button>
-      </form>
-    </div>
+    </>
   );
 };
 
