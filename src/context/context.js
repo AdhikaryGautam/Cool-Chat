@@ -1,14 +1,25 @@
 import { createContext, useState, useEffect } from "react";
 import { onAuthStateChanged } from "firebase/auth";
-import { auth } from "../firebase";
-import Login from "../pages/Login";
+import { auth, db } from "../firebase";
 import Loading from "../pages/Loading";
+import { doc, getDoc } from "firebase/firestore";
 
-export const AuthContext = createContext();
+export const UserContext = createContext();
 
-const AuthProvider = ({ children }) => {
+const UserProvider = ({ children }) => {
   const [user, setUser] = useState(null);
+  const [user2, setUser2] = useState(null);
+  const [chatUsers, setChatUsers] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
+  const [isChatLoading, setIsChatLoading] = useState(true);
+  const [isChatDetailsLoading, setIsChatDetailsLoading] = useState(true);
+  const [message, setMessage] = useState();
+
+  const selectUser = async (uid) => {
+    const docRef = doc(db, "users", uid);
+    const docSnap = await getDoc(docRef);
+    setUser2(docSnap.data());
+  };
 
   useEffect(() => {
     onAuthStateChanged(auth, (user) => {
@@ -22,10 +33,26 @@ const AuthProvider = ({ children }) => {
   }
 
   return (
-    <AuthContext.Provider value={{ user, setUser }}>
+    <UserContext.Provider
+      value={{
+        user,
+        setUser,
+        user2,
+        setUser2,
+        selectUser,
+        isChatLoading,
+        setIsChatLoading,
+        isChatDetailsLoading,
+        setIsChatDetailsLoading,
+        chatUsers,
+        setChatUsers,
+        message,
+        setMessage,
+      }}
+    >
       {children}
-    </AuthContext.Provider>
+    </UserContext.Provider>
   );
 };
 
-export default AuthProvider;
+export default UserProvider;

@@ -1,9 +1,12 @@
-import React from "react";
+import { useContext } from "react";
 import { Container, Col, Row } from "react-bootstrap";
 import Sidebar from "../components/Sidebar";
 import ChatList from "../components/ChatList";
+import ChatDetail from "../components/ChatDetail";
+import { UserContext } from "../context/context";
 
-const Chat = () => {
+const Chat = ({ Component }) => {
+  const { isChatLoading } = useContext(UserContext);
   return (
     <div className="chat-main">
       <Container fluid={true} className="p-0 h-100">
@@ -12,9 +15,19 @@ const Chat = () => {
             <Sidebar />
           </Col>
           <Col lg={3} className="p-0">
-            <ChatList />
+            <Component />
           </Col>
-          <Col lg={6} className="p-0"></Col>
+          <Col lg={8} className="p-0">
+            {isChatLoading ? (
+              <div className="loading">
+                <div className="spinner-border text-primary" role="status">
+                  <span className="visually-hidden">Loading...</span>
+                </div>
+              </div>
+            ) : (
+              <ChatDetail />
+            )}
+          </Col>
         </Row>
       </Container>
     </div>
