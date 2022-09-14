@@ -6,18 +6,25 @@ import ChatDetail from "../components/ChatDetail";
 import { UserContext } from "../context/context";
 
 const Chat = ({ Component }) => {
-  const { isChatLoading } = useContext(UserContext);
+  const { isChatLoading, showChatDetails } = useContext(UserContext);
   return (
     <div className="chat-main">
       <Container fluid={true} className="p-0 h-100">
         <Row className="h-100">
-          <Col lg={1} className="p-0">
+          <Col lg={1} className="p-0 sidebar-column">
             <Sidebar />
           </Col>
-          <Col lg={3} className="p-0">
+          <Col lg={3} className="chatList-column">
             <Component />
           </Col>
-          <Col lg={8} className="p-0">
+          <Col
+            lg={8}
+            className={
+              showChatDetails
+                ? '"p-0 chatDetails-column show'
+                : "p-0 chatDetails-column"
+            }
+          >
             {isChatLoading ? (
               <div className="loading">
                 <div className="spinner-border text-primary" role="status">
