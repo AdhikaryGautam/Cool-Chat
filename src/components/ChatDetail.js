@@ -1,5 +1,5 @@
 import { UserContext } from "../context/context";
-import { useEffect, useState, useContext, useCallback } from "react";
+import { useEffect, useState, useContext, useCallback, useRef } from "react";
 import { RiSendPlane2Fill } from "react-icons/ri";
 import { FaRegFileImage } from "react-icons/fa";
 import { IoChevronBackSharp } from "react-icons/io5";
@@ -24,6 +24,7 @@ import {
 const ChatDetail = () => {
   const [typedMessage, setTypedMessage] = useState("");
   const [file, setFile] = useState(null);
+  const chatRef = useRef();
   const {
     user,
     user2,
@@ -82,8 +83,8 @@ const ChatDetail = () => {
           });
         }
       );
+      setFile(null);
     }
-
     chatRef.current?.scrollIntoView({ behavior: "smooth" });
   };
 
@@ -108,11 +109,14 @@ const ChatDetail = () => {
     }
   }, [user2]);
 
-  const chatRef = useCallback((node) => {
-    if (node !== null) {
-      node.scrollIntoView({ behavior: "smooth" });
-    }
-  }, []);
+  const scrollToBottom = () => {
+    console.log(chatRef.current);
+    chatRef.current?.scrollIntoView({ behavior: "smooth" });
+  };
+
+  useEffect(() => {
+    scrollToBottom();
+  }, [message]);
 
   return isChatDetailsLoading ? (
     <div className="loading">
