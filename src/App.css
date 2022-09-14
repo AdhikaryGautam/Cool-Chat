@@ -196,6 +196,13 @@ button {
   margin-bottom: 0;
 }
 
+@media screen and (max-width: 500px) {
+  .form-container form {
+    width: 300px;
+    padding: 2rem;
+  }
+}
+
 /* FORM END */
 
 /* ============================================= */
@@ -246,6 +253,34 @@ button {
 
 .sidebar button {
   background-color: transparent;
+  padding: 0;
+}
+
+@media screen and (max-width: 992px) {
+  .sidebar-column {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    z-index: 99;
+    /* height: 100px; */
+  }
+  .sidebar {
+    flex-direction: row;
+    height: max-content;
+    background-color: #fff;
+    padding: 16px 24px;
+  }
+  .sidebar-body {
+    flex-direction: row;
+  }
+  .sidebar .sidebar-item {
+    margin-bottom: 0;
+    margin-right: 2rem;
+  }
+  .sidebar .sidebar-item:last-of-type {
+    margin-right: 0;
+  }
 }
 
 /* SIDEBAR END */
@@ -376,6 +411,19 @@ button {
   font-size: 0.8rem;
   color: #878a92;
   font-weight: 600;
+}
+
+.chatList-column {
+  padding: 0;
+}
+
+@media screen and (max-width: 992px) {
+  .chat-list {
+    padding: 24px 36px;
+  }
+  .chat-list .user-list {
+    height: 52.6vh;
+  }
 }
 
 /* CHATLIST END */
@@ -570,6 +618,62 @@ button {
   border: 1px solid #e6ebf5;
 }
 
+.chat-details .cross {
+  display: none;
+}
+
+.chat-details .cross {
+  position: absolute;
+  left: 10px;
+  top: 24px;
+}
+
+.chat-details .cross button {
+  border-radius: 50%;
+  background-color: transparent;
+  padding: 10px 13px;
+}
+
+.chat-details .cross button svg {
+  color: var(--blue);
+  height: 20px;
+  width: 20px;
+}
+
+@media screen and (max-width: 992px) {
+  .chat-details .cross {
+    display: block;
+  }
+  .profile {
+    padding: 24px 36px;
+  }
+  .chat-details {
+    padding: 24px 0;
+  }
+  .chat-details .chat-head {
+    margin-left: 50px;
+  }
+  .chat-details .chat-footer .chat-input {
+    padding: 0;
+  }
+  .chat-details .file-input__label {
+    margin-right: 83px;
+  }
+  .chatDetails-column {
+    position: fixed;
+    z-index: 1000;
+    top: 0;
+    right: 0;
+    background-color: #fff;
+    transform: translateX(100%);
+    transition: transform 0.3s ease-in-out;
+  }
+  .chatDetails-column.show {
+    transform: translateX(0);
+    visibility: visible;
+  }
+}
+
 /* CHAT-DETAILS END */
 
 /* ============================================= */
@@ -639,6 +743,12 @@ button {
   font-size: 14px;
   padding: 8px 12px;
   background-color: #fff;
+}
+
+@media screen and (max-width: 992px) {
+  .profile {
+    padding: 24px 36px;
+  }
 }
 
 /* PROFILE END */

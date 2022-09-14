@@ -43,11 +43,6 @@ const Sidebar = () => {
         >
           <RiMessage3Line />
         </NavLink>
-        {/* <div className="sidebar-item ">
-          <NavLink to="/">
-            <RiMessage3Line />
-          </NavLink>
-        </div> */}
       </div>
       <div className="sidebar-footer">
         <div className="sidebar-item ">

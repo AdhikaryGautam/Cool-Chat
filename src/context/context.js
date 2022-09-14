@@ -14,11 +14,13 @@ const UserProvider = ({ children }) => {
   const [isChatLoading, setIsChatLoading] = useState(true);
   const [isChatDetailsLoading, setIsChatDetailsLoading] = useState(true);
   const [message, setMessage] = useState();
+  const [showChatDetails, setShowChatDetails] = useState(false);
 
   const selectUser = async (uid) => {
     const docRef = doc(db, "users", uid);
     const docSnap = await getDoc(docRef);
     setUser2(docSnap.data());
+    setShowChatDetails(true);
   };
 
   useEffect(() => {
@@ -48,6 +50,8 @@ const UserProvider = ({ children }) => {
         setChatUsers,
         message,
         setMessage,
+        showChatDetails,
+        setShowChatDetails,
       }}
     >
       {children}

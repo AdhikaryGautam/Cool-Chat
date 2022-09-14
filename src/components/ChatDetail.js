@@ -2,6 +2,7 @@ import { UserContext } from "../context/context";
 import { useEffect, useState, useContext, useCallback } from "react";
 import { RiSendPlane2Fill } from "react-icons/ri";
 import { FaRegFileImage } from "react-icons/fa";
+import { IoChevronBackSharp } from "react-icons/io5";
 
 import {
   doc,
@@ -30,6 +31,7 @@ const ChatDetail = () => {
     setMessage,
     isChatDetailsLoading,
     setIsChatDetailsLoading,
+    setShowChatDetails,
   } = useContext(UserContext);
 
   const submit = async (e) => {
@@ -120,6 +122,14 @@ const ChatDetail = () => {
     </div>
   ) : (
     <div className="chat-details">
+      <div className="cross">
+        <button
+          className="cross-button"
+          onClick={() => setShowChatDetails(false)}
+        >
+          <IoChevronBackSharp />
+        </button>
+      </div>
       <div className="chat-head">
         <div className="user-img ">
           {user2.photoURL ? (
