@@ -72,7 +72,7 @@ const Login = ({ children }) => {
       <div className="form-container">
         <div className="form-title">
           <h3>Sign In</h3>
-          <p>Sign In to continue to CoolChat</p>
+          <p>Sign In to continue to CoolChat!! Check It Out</p>
         </div>
         <form action="#">
           <div className="form-group">
